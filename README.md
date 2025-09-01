@@ -56,11 +56,10 @@ CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>
 npm run dev
 run at  http://localhost:3000 
 
-Deployment
+## 🚀 Deployment  
 
-Vercel Live Demo:
-https://reno-platforms-34hvc2j60-yamini-shriwastavs-projects.vercel.app/
+### 🔗 Vercel Live Demo  
+[Reno Platforms App](https://reno-platforms-34hvc2j60-yamini-shriwastavs-projects.vercel.app/)  
 
-📺 Demo Video:
-https://youtu.be/lGBE42y5-50 
- 
+### 📺 Demo Video  
+[Watch on YouTube](https://youtu.be/lGBE42y5-50)  
