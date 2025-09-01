@@ -3,7 +3,12 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 
 export default function AddSchool() {
-  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm();
   const [message, setMessage] = useState("");
 
   const onSubmit = async (data) => {
@@ -19,12 +24,23 @@ export default function AddSchool() {
       form.append("website", data.website || "");
       if (data.image && data.image[0]) form.append("image", data.image[0]);
 
-      const res = await fetch("/api/add-school", { method: "POST", body: form });
-      const out = await res.json();
+      const res = await fetch("/api/add-school", {
+        method: "POST",
+        body: form,
+      });
+
+      const contentType = res.headers.get("content-type") || "";
+      let out;
+      if (contentType.includes("application/json")) {
+        out = await res.json();
+      } else {
+        const text = await res.text();
+        throw new Error(text || "Unexpected non-JSON response");
+      }
 
       if (!res.ok) throw new Error(out?.error || "Failed to save");
 
-      setMessage("✅ School added successfully.");
+      setMessage(" School added successfully.");
       reset();
     } catch (err) {
       setMessage("❌ " + (err.message || "Unexpected error"));
@@ -41,23 +57,22 @@ export default function AddSchool() {
         </nav>
       </div>
 
-      <form className="card" onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
+      <form
+        className="card"
+        onSubmit={handleSubmit(onSubmit)}
+        encType="multipart/form-data"
+      >
         <div className="form-grid col2">
           <div>
-            <label className="label">Name</label>
-            <input className="input" {...register("name", { required: "Name is required" })} />
+            <label>Name</label>
+            <input {...register("name", { required: "Name is required" })} />
             {errors.name && <p className="err">{errors.name.message}</p>}
           </div>
-
           <div>
-            <label className="label">Email</label>
+            <label>Email</label>
             <input
-              className="input"
               type="email"
-              {...register("email_id", {
-                required: "Email required",
-                pattern: { value: /[^@\s]+@[^@\s]+\.[^@\s]+/, message: "Invalid email" }
-              })}
+              {...register("email_id", { required: "Email required" })}
             />
             {errors.email_id && <p className="err">{errors.email_id.message}</p>}
           </div>
@@ -65,32 +80,29 @@ export default function AddSchool() {
 
         <div className="form-grid col2">
           <div>
-            <label className="label">Address</label>
-            <input className="input" {...register("address", { required: "Address required" })} />
+            <label>Address</label>
+            <input {...register("address", { required: "Address required" })} />
             {errors.address && <p className="err">{errors.address.message}</p>}
           </div>
-
           <div>
-            <label className="label">City</label>
-            <input className="input" {...register("city", { required: "City required" })} />
+            <label>City</label>
+            <input {...register("city", { required: "City required" })} />
             {errors.city && <p className="err">{errors.city.message}</p>}
           </div>
         </div>
 
         <div className="form-grid col2">
           <div>
-            <label className="label">State</label>
-            <input className="input" {...register("state", { required: "State required" })} />
+            <label>State</label>
+            <input {...register("state", { required: "State required" })} />
             {errors.state && <p className="err">{errors.state.message}</p>}
           </div>
-
           <div>
-            <label className="label">Contact (10 digits)</label>
+            <label>Contact</label>
             <input
-              className="input"
               {...register("contact", {
                 required: "Contact required",
-                pattern: { value: /^\d{10}$/, message: "Enter 10 digits" }
+                pattern: { value: /^\d{10}$/, message: "10 digits only" },
               })}
             />
             {errors.contact && <p className="err">{errors.contact.message}</p>}
@@ -98,25 +110,13 @@ export default function AddSchool() {
         </div>
 
         <div>
-          <label className="label">Website (optional)</label>
-          <input
-            className="input"
-            type="url"
-            placeholder="https://example.com"
-            {...register("website", {
-              pattern: {
-                value: /^https?:\/\/.+/i,
-                message: "Enter a valid URL starting with http(s)"
-              }
-            })}
-          />
-          {errors.website && <p className="err">{errors.website.message}</p>}
+          <label>Website</label>
+          <input type="url" {...register("website")} />
         </div>
 
         <div>
-          <label className="label">Image (JPG/PNG/WebP, max 2MB)</label>
+          <label>Image</label>
           <input
-            className="file"
             type="file"
             accept="image/*"
             {...register("image", { required: "Image required" })}
@@ -124,14 +124,13 @@ export default function AddSchool() {
           {errors.image && <p className="err">{errors.image.message}</p>}
         </div>
 
-        <button className="button" type="submit" disabled={isSubmitting}>
+        <button type="submit" disabled={isSubmitting} className="btn">
           {isSubmitting ? "Saving…" : "Save School"}
         </button>
 
         {message && <p className="message">{message}</p>}
       </form>
 
-      {/* ✅ Styling */}
       <style jsx>{`
         .container {
           max-width: 700px;
@@ -148,7 +147,7 @@ export default function AddSchool() {
           background: #fff;
           padding: 20px;
           border-radius: 12px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         .form-grid {
           display: grid;
@@ -158,36 +157,40 @@ export default function AddSchool() {
         .col2 {
           grid-template-columns: 1fr 1fr;
         }
-        .label {
+        label {
           font-weight: 600;
           margin-bottom: 6px;
           display: block;
         }
-        .input, .file {
+        input {
           width: 100%;
           padding: 10px 12px;
           border: 1px solid #ccc;
           border-radius: 6px;
           font-size: 14px;
         }
-        .input:focus, .file:focus {
-          border-color: #0070f3;
+        input:focus {
+          border-color: #4f46e5;
           outline: none;
-          box-shadow: 0 0 0 2px rgba(0,118,255,0.2);
+          box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
         }
-        .button {
+          
+        .btn {
+          display: inline-block;
           margin-top: 12px;
-          background: #0070f3;
+          background: #4f46e5;
           color: white;
           padding: 10px 16px;
           border: none;
           border-radius: 8px;
           font-size: 15px;
           cursor: pointer;
-          transition: background 0.2s;
+          text-align: center;
+          transition: background 0.2s ease;
+          text-decoration: none; /* important for Link */
         }
-        .button:hover {
-          background: #0059c1;
+        .btn:hover {
+          background: #3730a3;
         }
         .err {
           color: red;
