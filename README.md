@@ -1,4 +1,4 @@
-# Reno_Platforms
+
 # Reno_Platforms Assignment  
 # 🏫 School Management Platform
 
@@ -29,12 +29,22 @@ A simple Next.js application to manage schools with:
 
 ## 📸 Screenshots
 
+### Home Page  
 ![Home Page Screenshot](./school-directory/screenshots/home.png)  
 
+### Add School Page  
 ![Add School Screenshot](./school-directory/screenshots/add-school.png)  
 
-### Show Schools Page
+### Show Schools Page  
 ![Show Schools Screenshot](./school-directory/screenshots/show-schools.png)  
+
+## 🚀 Deployment  
+
+### 🔗 Vercel Live Demo  
+[Reno Platforms App](https://reno-platforms-34hvc2j60-yamini-shriwastavs-projects.vercel.app/)  
+
+### 📺 Demo Video  
+[Watch on YouTube](https://youtu.be/lGBE42y5-50)  
 
 ---
 
@@ -56,10 +66,3 @@ CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>
 npm run dev
 run at  http://localhost:3000 
 
-## 🚀 Deployment  
-
-### 🔗 Vercel Live Demo  
-[Reno Platforms App](https://reno-platforms-34hvc2j60-yamini-shriwastavs-projects.vercel.app/)  
-
-### 📺 Demo Video  
-[Watch on YouTube](https://youtu.be/lGBE42y5-50)  
