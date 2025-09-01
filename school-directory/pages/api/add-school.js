@@ -1,12 +1,13 @@
 import formidable from "formidable";
-import cloudinary from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 import pool from "@/lib/db";
 
 export const config = {
-  api: { bodyParser: false }, // disable default parser
+  api: { bodyParser: false },
 };
 
-cloudinary.v2.config({
+//  Cloudinary config
+cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
@@ -23,13 +24,15 @@ export default async function handler(req, res) {
     if (err) return res.status(400).json({ error: "Form parse error" });
 
     try {
-      // ✅ Handle image safely
+      // Handle image safely
       let imageUrl = null;
       if (files.image) {
         const file = Array.isArray(files.image) ? files.image[0] : files.image;
-        const upload = await cloudinary.v2.uploader.upload(file.filepath, {
+
+        const upload = await cloudinary.uploader.upload(file.filepath, {
           folder: "schools",
         });
+
         imageUrl = upload.secure_url;
       }
 

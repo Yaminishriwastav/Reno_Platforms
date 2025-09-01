@@ -1,3 +1,5 @@
+
+
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
@@ -53,7 +55,7 @@ export default function AddSchool() {
       <div className="header">
         <h1>Add School</h1>
         <nav className="nav">
-          <Link href="/showSchools">View Schools</Link>
+          <Link href="/showSchools">View Schools🏫</Link>
         </nav>
       </div>
 
